@@ -1,6 +1,8 @@
 <?php
 
-namespace Belur;
+namespace Belur\Http;
+
+use Belur\Server\Server;
 
 class Request
 {

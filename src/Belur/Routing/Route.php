@@ -1,6 +1,6 @@
 <?php
 
-namespace Belur;
+namespace Belur\Routing;
 
 class Route {
     protected string $uri;

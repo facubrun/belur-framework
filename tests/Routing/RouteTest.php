@@ -2,7 +2,7 @@
 
 namespace Belur\Tests;
 
-use Belur\Route;
+use Belur\Routing\Route;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 

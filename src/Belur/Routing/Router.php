@@ -1,7 +1,10 @@
 <?php
 
-namespace Belur;
+namespace Belur\Routing;
 
+use Belur\Http\HttpMethod;
+use Belur\Http\HttpNotFoundException;
+use Belur\Http\Request;
 use Closure;
 
 class Router {

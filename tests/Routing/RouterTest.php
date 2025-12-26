@@ -2,10 +2,10 @@
 
 namespace Belur\Tests;
 
-use Belur\HttpMethod;
-use Belur\Request;
-use Belur\Router;
-use Belur\Server;
+use Belur\Http\HttpMethod;
+use Belur\Http\Request;
+use Belur\Routing\Router;
+use Belur\Server\Server;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase {

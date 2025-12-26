@@ -1,6 +1,6 @@
 <?php
 
-namespace Belur;
+namespace Belur\Http;
 
 enum HttpMethod:string {
     case GET = "GET";

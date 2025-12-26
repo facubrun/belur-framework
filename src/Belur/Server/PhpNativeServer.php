@@ -1,6 +1,8 @@
 <?php
 
-namespace Belur;
+namespace Belur\Server;
+
+use Belur\Http\HttpMethod;
 
 class PhpNativeServer implements Server {
     public function requestUri(): string {

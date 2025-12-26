@@ -2,11 +2,10 @@
 
 require_once  '../vendor/autoload.php';
 
-use Belur\HttpNotFoundException;
-use Belur\PHPNativeServer;
-use Belur\Request;
-use Belur\Router;
-use Belur\Server;
+use Belur\Http\HttpNotFoundException;
+use Belur\Http\Request;
+use Belur\Server\PhpNativeServer;
+use Belur\Routing\Router;
 
 $router = new Router();
 

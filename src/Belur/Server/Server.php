@@ -1,6 +1,8 @@
 <?php
 
-namespace Belur;
+namespace Belur\Server;
+
+use Belur\Http\HttpMethod;
 
 interface Server {
     public function requestUri(): string;
