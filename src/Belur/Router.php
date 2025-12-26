@@ -2,6 +2,8 @@
 
 namespace Belur;
 
+use Closure;
+
 class Router {
     protected array $routes = []; // protected para que se pueda extender la clase
 
@@ -14,34 +16,37 @@ class Router {
 
     public function resolve(string $uri, string $method) {
 
-        $action = $this->routes[$method][$uri] ?? null; // busca la acción correspondiente al método y URI
-
-        if (is_null($action)){
-            throw new HttpNotFoundException();
+        foreach ($this->routes[$method] as $route) {
+            if ($route->matches($uri)) {
+                return $route;
+            }
         }
-
-        return $action; // devuelve la acción encontrada
+        throw new HttpNotFoundException();
     }
 
 
-    public function get($uri, callable $action) {
-        $this->routes[HttpMethod::GET->value][$uri] = $action; // almacena la acción para el método GET y la URI dada
+    protected function registerRoute(HttpMethod $method, string $uri, Closure $action) {
+        $this->routes[$method->value][] = new Route($uri, $action); // almacena la acción para el método GET y la URI dada
     }
 
-    public function post($uri, callable $action) {
-        $this->routes[HttpMethod::POST->value][$uri] = $action; // almacena la acción para el método POST y la URI dada
+    public function get($uri, \Closure $action) {
+        $this->registerRoute(HttpMethod::GET, $uri, $action);
     }
 
-    public function put($uri, callable $action) {
-        $this->routes[HttpMethod::PUT->value][$uri] = $action; // almacena la acción para el método PUT y la URI dada
+    public function post($uri, Closure $action) {
+        $this->registerRoute(HttpMethod::POST, $uri, $action);
     }
 
-    public function patch($uri, callable $action) {
-        $this->routes[HttpMethod::PATCH->value][$uri] = $action; // almacena la acción para el método PATCH y la URI dada
+    public function put($uri, Closure $action) {
+        $this->registerRoute(HttpMethod::PUT, $uri, $action);
     }
 
-    public function delete($uri, callable $action) {
-        $this->routes[HttpMethod::DELETE->value][$uri] = $action; // almacena la acción para el método DELETE y la URI dada
+    public function patch($uri, Closure $action) {
+        $this->registerRoute(HttpMethod::PATCH, $uri, $action);
+    }
+
+    public function delete($uri, Closure $action) {
+        $this->registerRoute(HttpMethod::DELETE, $uri, $action);
     }
 
 }
