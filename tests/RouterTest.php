@@ -5,9 +5,17 @@ namespace Belur\Tests;
 use Belur\HttpMethod;
 use Belur\Request;
 use Belur\Router;
+use Belur\Server;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase {
+
+    private function createMockRequest(string $uri, HttpMethod $method): Request {
+        $mock = $this->getMockBuilder(Server::class)->getMock();
+        $mock->method('requestUri')->willReturn($uri);
+        $mock->method('requestMethod')->willReturn($method);
+        return new Request($mock);
+    }
 
     public function test_resolve_basic_route_with_callback_action() {
         $uri = '/test';
@@ -16,7 +24,7 @@ class RouterTest extends TestCase {
         $router->get($uri, $action);
 
 
-        $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
+        $route = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
         $this->assertEquals($action, $route->action());
         $this->assertEquals($uri, $route->uri());
     }
@@ -34,7 +42,7 @@ class RouterTest extends TestCase {
         }
 
         foreach ($routes as $uri => $action) {
-            $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
+            $route = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
             $this->assertEquals($action, $route->action());
             $this->assertEquals($uri, $route->uri());
         }
@@ -62,7 +70,7 @@ class RouterTest extends TestCase {
         }
 
         foreach ($routes as [$method, $uri, $action]) {
-            $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::from($method))));
+            $route = $router->resolve($this->createMockRequest($uri, HttpMethod::from($method)));
             $this->assertEquals($action, $route->action());
             $this->assertEquals($uri, $route->uri());
         }
