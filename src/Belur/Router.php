@@ -1,6 +1,6 @@
 <?php
 
-require "./HttpMethod.php";
+namespace Belur;
 
 class Router {
     protected array $routes = []; // protected para que se pueda extender la clase

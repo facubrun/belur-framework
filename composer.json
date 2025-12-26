@@ -1,0 +1,18 @@
+{
+    "name": "facubrun/belur-framework",
+    "description": "simple php Framework inspired by Laravel",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Belur\\": "src/Belur"
+        }
+    },
+    "authors": [
+        {
+            "name": "facubrun",
+            "email": "facundobrun0303@gmail.com"
+        }
+    ],
+    "require": {}
+}
