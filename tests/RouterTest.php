@@ -3,6 +3,7 @@
 namespace Belur\Tests;
 
 use Belur\HttpMethod;
+use Belur\Request;
 use Belur\Router;
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +16,7 @@ class RouterTest extends TestCase {
         $router->get($uri, $action);
 
 
-        $route = $router->resolve($uri, HttpMethod::GET->value);
+        $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
         $this->assertEquals($action, $route->action());
         $this->assertEquals($uri, $route->uri());
     }
@@ -33,7 +34,7 @@ class RouterTest extends TestCase {
         }
 
         foreach ($routes as $uri => $action) {
-            $route = $router->resolve($uri, HttpMethod::GET->value);
+            $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::GET)));
             $this->assertEquals($action, $route->action());
             $this->assertEquals($uri, $route->uri());
         }
@@ -61,7 +62,7 @@ class RouterTest extends TestCase {
         }
 
         foreach ($routes as [$method, $uri, $action]) {
-            $route = $router->resolve($uri, $method);
+            $route = $router->resolve(new Request(new MockServer($uri, HttpMethod::from($method))));
             $this->assertEquals($action, $route->action());
             $this->assertEquals($uri, $route->uri());
         }

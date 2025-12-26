@@ -3,6 +3,7 @@
 require_once  '../vendor/autoload.php';
 
 use Belur\HttpNotFoundException;
+use Belur\PHPNativeServer;
 use Belur\Request;
 use Belur\Router;
 use Belur\Server;
@@ -31,7 +32,7 @@ $router->delete('/test', function() {
 
 
 try {
-    $route = $router->resolve(new Request(new Server()));
+    $route = $router->resolve(new Request(new PhpNativeServer()));
     $action = $route->action();
     print($action());
 } catch (HttpNotFoundException $e) {
