@@ -4,13 +4,17 @@ require_once  '../vendor/autoload.php';
 
 use Belur\Http\HttpNotFoundException;
 use Belur\Http\Request;
+use Belur\Http\Response;
 use Belur\Server\PhpNativeServer;
 use Belur\Routing\Router;
 
 $router = new Router();
 
 $router->get('/test', function() {
-    return 'GET OK.';
+    $response = new Response();
+    $response->setHeader('Content-Type', 'application/json');
+    $response->setBody(json_encode(['message' => 'GET OK.']));
+    return $response;
 });
 
 $router->post('/test', function() {
@@ -30,11 +34,16 @@ $router->delete('/test', function() {
 });
 
 
+$server = new PhpNativeServer();
 try {
-    $route = $router->resolve(new Request(new PhpNativeServer()));
+    $request = new Request($server);
+    $route = $router->resolve($request);
     $action = $route->action();
-    print($action());
+    $response = $action($request);
+    $server->sendResponse($response);
 } catch (HttpNotFoundException $e) {
-    print("Not Found");
-    http_response_code(404);
+    $response = new Response();
+    $response->setStatus(404);
+    $response->setBody('404 Not Found');
+    $server->sendResponse($response);
 }

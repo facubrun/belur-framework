@@ -3,6 +3,7 @@
 namespace Belur\Server;
 
 use Belur\Http\HttpMethod;
+use Belur\Http\Response;
 
 interface Server {
     public function requestUri(): string;
@@ -12,4 +13,6 @@ interface Server {
     public function postData(): array;
 
     public function queryParams(): array;
+
+    public function sendResponse(Response $response);
 }
