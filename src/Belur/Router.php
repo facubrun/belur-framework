@@ -12,9 +12,7 @@ class Router {
         }
     }
 
-    public function resolve() {
-        $method = $_SERVER['REQUEST_METHOD']; // obtiene el método HTTP de la solicitud
-        $uri = $_SERVER['REQUEST_URI']; // obtiene la URI de la solicitud
+    public function resolve(string $uri, string $method) {
 
         $action = $this->routes[$method][$uri] ?? null; // busca la acción correspondiente al método y URI
 

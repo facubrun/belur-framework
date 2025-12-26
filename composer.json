@@ -8,11 +8,21 @@
             "Belur\\": "src/Belur"
         }
     },
+    "scripts": {
+        "tests": "phpunit --colors=always --testdox tests/"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Belur\\Tests\\": "tests"
+        }
+    },
     "authors": [
         {
             "name": "facubrun",
             "email": "facundobrun0303@gmail.com"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^12.5"
+    }
 }
