@@ -34,4 +34,16 @@ class Router {
         $this->routes[HttpMethod::POST->value][$uri] = $action; // almacena la acción para el método POST y la URI dada
     }
 
+    public function put($uri, callable $action) {
+        $this->routes[HttpMethod::PUT->value][$uri] = $action; // almacena la acción para el método PUT y la URI dada
+    }
+
+    public function patch($uri, callable $action) {
+        $this->routes[HttpMethod::PATCH->value][$uri] = $action; // almacena la acción para el método PATCH y la URI dada
+    }
+
+    public function delete($uri, callable $action) {
+        $this->routes[HttpMethod::DELETE->value][$uri] = $action; // almacena la acción para el método DELETE y la URI dada
+    }
+
 }
