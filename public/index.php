@@ -11,14 +11,15 @@ use Belur\Routing\Router;
 $router = new Router();
 
 $router->get('/test', function() {
-    $response = new Response();
-    $response->setHeader('Content-Type', 'application/json');
-    $response->setBody(json_encode(['message' => 'GET OK.']));
-    return $response;
+    return Response::text('GET OK.');
 });
 
-$router->post('/test', function() {
-    return 'POST OK.';
+$router->post('/test', function(Request $request) {
+    return Response::text('POST OK.');
+});
+
+$router->get('/redirect', function(Request $request) {
+    return Response::redirect('/test');
 });
 
 $router->put('/test', function() {
@@ -42,8 +43,6 @@ try {
     $response = $action($request);
     $server->sendResponse($response);
 } catch (HttpNotFoundException $e) {
-    $response = new Response();
-    $response->setStatus(404);
-    $response->setBody('404 Not Found');
+    $response = Response::text('404 Not Found')->setStatus(404);
     $server->sendResponse($response);
 }
