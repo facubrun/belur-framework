@@ -2,6 +2,11 @@
 
 namespace Belur\Routing;
 
+use Closure;
+
+/**
+ * Manipulation of routes 
+ */
 class Route {
     protected string $uri;
     protected \Closure $action;
@@ -17,22 +22,49 @@ class Route {
         $this->parameters = $parameters[1];
     }
 
-    public function uri() {
+    /**
+     * Get the URI of the route.
+     *
+     * @return string
+     */
+    public function uri(): string {
         return $this->uri;
     }
 
-    public function action() {
+    /**
+     * Get the action of the route.
+     *
+     * @return Closure
+     */
+    public function action(): Closure {
         return $this->action;
     }
 
+    /**
+     * Get the matches of a regex from the URI.
+     *
+     * @param string $uri
+     * @return boolean
+     */
     public function matches(string $uri): bool {
         return preg_match("#^$this->regex/?$#", $uri);
     }
 
+    /**
+     * Check if the route has parameters.
+     *
+     * @return boolean
+     */
     public function hasParameters(): bool {
         return count($this->parameters) > 0;
     }
 
+    /**
+     * Parse parameters from the URI.
+     *
+     * @param string $uri
+     * @return array
+     */
     public function parseParameters(string $uri): array {
         preg_match("#^$this->regex$#", $uri, $arguments);
 

@@ -2,42 +2,108 @@
 
 namespace Belur\Http;
 
+/**
+ * HTTP Response that will be sent to the client.
+ */
 class Response {
+    /**
+     * Response HTTP status code.
+     * 
+     * @var integer
+     */
     protected int $status = 200;
+
+    /**
+     * Response HTTP headers.
+     * 
+     * @var array
+     */
     protected array $headers = [];
+
+    /**
+     * Response HTTP body.
+     * 
+     * @var string|null
+     */
     protected ?string $body = '';
 
+    /**
+     * Get response HTTP status code
+     *
+     * @return integer
+     */
     public function status(): int {
         return $this->status;
     }
 
+    /**
+     * Set response HTTP status code
+     *
+     * @param integer $status
+     * @return self
+     */
     public function setStatus(int $status): self {
         $this->status = $status;
         return $this;
     }
 
+    /**
+     * Get response HTTP headers.
+     *
+     * @return array
+     */
     public function headers(): array {
         return $this->headers;
     }
 
+    /**
+     * Set HTTP header ´$key´ to ´$value´
+     *
+     * @param string $key
+     * @param string $value
+     * @return self
+     */
     public function setHeader(string $key, string $value): self {
         $this->headers[strtolower($key)] = $value;
         return $this;
     }
 
+    /**
+     * Remove HTTP header ´$key´
+     *
+     * @param string $key
+     * @return void
+     */
     public function removeHeader(string $key) {
         unset($this->headers[strtolower($key)]);
     }
 
+    /**
+     * Set the Content-Type header to ´$value´
+     *
+     * @param string $value
+     * @return self
+     */
     public function setContentType(string $value): self {
         $this->setHeader('Content-Type', $value);
         return $this;
     }
 
+    /**
+     * Get response HTTP body.
+     *
+     * @return string|null
+     */
     public function body(): ?string {
         return $this->body;
     }
 
+    /**
+     * Set response HTTP body.
+     *
+     * @param string|null $body
+     * @return self
+     */
     public function setBody(?string $body): self {
         $this->body = $body;
         return $this;
