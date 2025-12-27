@@ -8,21 +8,21 @@ namespace Belur\Http;
 class Response {
     /**
      * Response HTTP status code.
-     * 
+     *
      * @var integer
      */
     protected int $status = 200;
 
     /**
      * Response HTTP headers.
-     * 
+     *
      * @var array
      */
     protected array $headers = [];
 
     /**
      * Response HTTP body.
-     * 
+     *
      * @var string|null
      */
     protected ?string $body = '';
@@ -114,7 +114,7 @@ class Response {
             $this->removeHeader('Content-Type');
             $this->removeHeader('Content-Length');
         } else {
-            $this->setHeader('Content-Length',strlen($this->body));
+            $this->setHeader('Content-Length', strlen($this->body));
         }
     }
 

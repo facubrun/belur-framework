@@ -7,7 +7,6 @@ use Exception;
 /**
  * Exception thrown when a requested HTTP resource is not found.
  */
-class HttpNotFoundException extends Exception
-{
+class HttpNotFoundException extends Exception {
     //
 }

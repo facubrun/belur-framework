@@ -7,32 +7,31 @@ use Belur\Server\Server;
 /**
  * HTTP Request received from the client.
  */
-class Request
-{
+class Request {
     /**
      * Request URI.
-     * 
+     *
      * @var string
      */
     protected string $uri;
 
     /**
      * Request HTTP method.
-     * 
+     *
      * @var HttpMethod
      */
     protected HttpMethod $method;
-    
+
     /**
      * Request data.
-     * 
+     *
      * @var array
      */
     protected array $data;
 
     /**
      * Query parameters.
-     * 
+     *
      * @var array
      */
     protected array $query;
@@ -68,7 +67,7 @@ class Request
     }
 
     /**
-     * Get request data.
+     * Get request POST data.
      *
      * @return array
      */
@@ -84,5 +83,4 @@ class Request
     public function query(): array {
         return $this->query;
     }
-
 }

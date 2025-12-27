@@ -1,6 +1,6 @@
 <?php
 
-namespace Belur\Tests;
+namespace Belur\Tests\Routing;
 
 use Belur\Http\HttpMethod;
 use Belur\Http\Request;

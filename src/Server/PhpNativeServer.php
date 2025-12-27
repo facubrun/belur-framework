@@ -40,7 +40,7 @@ class PhpNativeServer implements Server {
     /**
      * @inheritDoc
      */
-    public function sendResponse(Response $response){
+    public function sendResponse(Response $response) {
         // PHP manda content-type por defecto si
         // no se setea uno, asi que lo removemos manualmente
         header("Content-Type: None");
@@ -48,7 +48,7 @@ class PhpNativeServer implements Server {
 
         $response->prepare();
         http_response_code($response->status());
-        foreach($response->headers() as $header => $value){
+        foreach ($response->headers() as $header => $value) {
             header("$header: $value");
             print($response->body());
         }

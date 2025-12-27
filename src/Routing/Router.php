@@ -16,8 +16,7 @@ class Router {
     /**
      * Constructor initializes the routes array for each HTTP method.
      */
-    public function __construct()
-    {
+    public function __construct() {
         foreach (HttpMethod::cases() as $method) {
             $this->routes[$method->value] = [];
         }
@@ -31,7 +30,6 @@ class Router {
      * @throws HttpNotFoundException
      */
     public function resolve(Request $request) {
-
         foreach ($this->routes[$request->method()->value] as $route) {
             if ($route->matches($request->uri())) {
                 return $route;
@@ -106,5 +104,4 @@ class Router {
     public function delete($uri, Closure $action) {
         $this->registerRoute(HttpMethod::DELETE, $uri, $action);
     }
-
 }

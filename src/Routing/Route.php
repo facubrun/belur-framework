@@ -5,7 +5,7 @@ namespace Belur\Routing;
 use Closure;
 
 /**
- * Manipulation of routes 
+ * Manipulation of routes
  */
 class Route {
     protected string $uri;
@@ -17,7 +17,7 @@ class Route {
         $this->uri = $uri;
         $this->action = $action;
         $this->regex = preg_replace('/\{([a-zA-Z]+)\}/', '([a-zA-Z0-9_]+)', $uri);
-        
+
         preg_match_all('/\{([a-zA-Z]+)\}/', $uri, $parameters);
         $this->parameters = $parameters[1];
     }

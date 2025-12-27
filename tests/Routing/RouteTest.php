@@ -1,6 +1,6 @@
 <?php
 
-namespace Belur\Tests;
+namespace Belur\Tests\Routing;
 
 use Belur\Routing\Route;
 use PHPUnit\Framework\TestCase;
@@ -35,7 +35,7 @@ class RouteTest extends TestCase {
     public static function routesWithParameters() {
         return [
             [
-                '/test/{test}', 
+                '/test/{test}',
                 '/test/123',
                 ['test' => '123']
             ],
@@ -72,5 +72,5 @@ class RouteTest extends TestCase {
         $this->assertTrue($route->hasParameters()); // asegurarse que la ruta tiene parametros
         $this->assertEquals($expectedParams, $route->parseParameters($uri));
     }
-    
+
 }
