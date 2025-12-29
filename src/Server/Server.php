@@ -2,7 +2,7 @@
 
 namespace Belur\Server;
 
-use Belur\Http\HttpMethod;
+use Belur\Http\Request;
 use Belur\Http\Response;
 
 /**
@@ -10,32 +10,11 @@ use Belur\Http\Response;
  */
 interface Server {
     /**
-     * Get the request URI.
+     * Get the request sent by the client.
      *
-     * @return string
+     * @return Request
      */
-    public function requestUri(): string;
-
-    /**
-     * Get the request HTTP method.
-     *
-     * @return HttpMethod
-     */
-    public function requestMethod(): HttpMethod;
-
-    /**
-     * Get the POST data.
-     *
-     * @return array
-     */
-    public function postData(): array;
-
-    /**
-     * Get the query parameters.
-     *
-     * @return array
-     */
-    public function queryParams(): array;
+    public function getRequest(): Request;
 
     /**
      * Send the response to the client.

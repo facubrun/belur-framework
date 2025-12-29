@@ -2,9 +2,7 @@
 
 namespace Lune\Tests\Http;
 
-use Belur\Http\HttpMethod;
 use Belur\Http\Response;
-use Belur\Server\Server;
 use PHPUnit\Framework\TestCase;
 
 class ResponseTest extends TestCase {
@@ -38,7 +36,7 @@ class ResponseTest extends TestCase {
         $response = new Response();
         $response->setContentType('text/plain')
                 ->setBody(null)
-                ->prepare();    
+                ->prepare();
         
         $this->assertArrayNotHasKey('content-type', $response->headers());
         $this->assertArrayNotHasKey('content-length', $response->headers());
