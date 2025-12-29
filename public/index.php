@@ -11,11 +11,11 @@ use Belur\Routing\Router;
 $router = new Router();
 
 $router->get('/test/{param}', function(Request $request) {
-    return Response::json($request->routeParams());
+    return Response::json($request->routeParams('param'));
 });
 
 $router->post('/test', function(Request $request) {
-    return Response::json($request->query());
+    return Response::json($request->query('test'));
 });
 
 $router->get('/redirect', function(Request $request) {
