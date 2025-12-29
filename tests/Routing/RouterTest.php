@@ -4,8 +4,10 @@ namespace Belur\Tests\Routing;
 
 use Belur\Http\HttpMethod;
 use Belur\Http\Request;
+use Belur\Http\Response;
 use Belur\Routing\Router;
 use Belur\Server\Server;
+use Closure;
 use PHPUnit\Framework\TestCase;
 
 class RouterTest extends TestCase {
@@ -73,5 +75,36 @@ class RouterTest extends TestCase {
             $this->assertEquals($action, $route->action());
             $this->assertEquals($uri, $route->uri());
         }
+    }
+
+    public function test_run_middlewares() {
+        $middleware1 = new class {
+            public function handle(Request $request, Closure $next): Response {
+                $response = $next($request);
+                $response->setHeader('X-Test-1', 'One Pass');
+                return $response;
+            }
+        };
+
+        $middleware2 = new class {
+            public function handle(Request $request, Closure $next): Response {
+                $response = $next($request);
+                $response->setHeader('X-Test-2', 'Two Pass');
+                return $response;
+            }
+        };
+
+        $router = new Router();
+        $uri = '/test';
+        $expectedResponse = Response::text('Final Response');
+
+        $router->get($uri, fn ($request) => $expectedResponse)
+            ->setMiddlewares([$middleware1, $middleware2]);
+
+        $response = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
+        $this->assertEquals($response->headers('X-Test-1'), 'One Pass');
+        $this->assertEquals($response->headers('X-Test-2'), 'Two Pass');
+        $this->assertEquals($expectedResponse, $response);
+
     }
 }

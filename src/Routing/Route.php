@@ -79,11 +79,14 @@ class Route {
 
     /**
      * Set a middleware for the route.
-     * @param Belur\Http\Middleware $middleware
+     * @param array $middlewares Array of middleware class names or instances
      * @return self
      */
     public function setMiddlewares(array $middlewares): self {
-        $this->middlewares = array_map(fn ($middleware) => new $middleware(), $middlewares);
+        $this->middlewares = array_map(
+            fn ($middleware) => is_string($middleware) ? new $middleware() : $middleware,
+            $middlewares
+        );
         return $this;
     }
 
