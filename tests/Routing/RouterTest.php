@@ -107,4 +107,37 @@ class RouterTest extends TestCase {
         $this->assertEquals($expectedResponse, $response);
 
     }
+
+    public function test_middleware_stack_can_be_sttoped(){
+        $middleware1 = new class {
+            public function handle(Request $request, Closure $next): Response {
+                // No llama a $next() para detener cadena
+                return Response::json(['message' => 'Stopped by middleware1'])
+                    ->setStatus(403)
+                    ->setHeader('X-Test-1', 'Middleware 1 Passed');
+            }
+        };
+
+        $middleware2 = new class {
+            public function handle(Request $request, Closure $next): Response {
+                $response = $next($request);
+                $response->setHeader('X-Test-2', 'Middleware 2 Passed');
+                return $response;
+            }
+        };
+
+        $router = new Router();
+        $uri = '/test';
+        $expectedResponse = Response::json(['message' => 'Stopped by middleware1']);
+
+
+        $router->get($uri, fn ($request) => $expectedResponse)
+            ->setMiddlewares([$middleware1, $middleware2]);
+
+        $response = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
+        $this->assertEquals($response->headers('X-Test-1'), 'Middleware 1 Passed');
+        $this->assertNull($response->headers('X-Test-2')); // middleware2 nunca ejecutó
+        $this->assertEquals(403, $response->status());
+        $this->assertEquals('{"message":"Stopped by middleware1"}', $response->body());
+    }
 }
