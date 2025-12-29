@@ -65,7 +65,7 @@ class RequestTest extends TestCase {
 
     public function test_route_params_returns_value_if_key_is_given() {
         $uri = '/products/111/features/222';
-        $route = new Route('/products/{productId}/features/{featureId}', fn() => 'test');
+        $route = new Route('/products/{productId}/features/{featureId}', fn () => 'test');
 
         $request = (new Request())
             ->setUri($uri)

@@ -3,14 +3,10 @@
 require_once  '../vendor/autoload.php';
 
 use Belur\App;
-use Belur\Container\Container;
 use Belur\Http\Request;
 use Belur\Http\Response;
-use Belur\Routing\Router;
 
-Container::singleton(Router::class);
-
-$app = new App();
+$app = App::bootstrap();
 
 $app->router->get('/test/{param}', function(Request $request) {
     return Response::json($request->routeParams('param'));

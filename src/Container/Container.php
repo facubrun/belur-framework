@@ -13,6 +13,6 @@ class Container {
     }
 
     public static function resolve(string $class) {
-        
+        return self::$instances[$class] ?? null;
     }
 }
