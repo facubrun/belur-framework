@@ -34,14 +34,14 @@ class Request {
      *
      * @var array
      */
-    protected array $data;
+    protected array $data = [];
 
     /**
      * Query parameters.
      *
      * @var array
      */
-    protected array $query;
+    protected array $query = [];
 
     /**
      * Get request URI.
@@ -106,10 +106,14 @@ class Request {
     /**
      * Get request POST data.
      *
-     * @return array
+     * @param string|null $key Optional key to get specific value
+     * @return mixed Returns specific value if key provided, otherwise returns all data
      */
-    public function data(): array {
-        return $this->data;
+    public function data(?string $key = null): mixed {
+        if ($key === null) {
+            return $this->data;
+        }
+        return $this->data[$key] ?? null;
     }
 
     /**
@@ -126,10 +130,14 @@ class Request {
     /**
      * Get query parameters.
      *
-     * @return array
+     * @param string|null $key Optional key to get specific value
+     * @return mixed Returns specific value if key provided, otherwise returns all query params
      */
-    public function query(): array {
-        return $this->query;
+    public function query(?string $key = null): mixed {
+        if ($key === null) {
+            return $this->query;
+        }
+        return $this->query[$key] ?? null;
     }
 
     /**
@@ -146,9 +154,14 @@ class Request {
     /**
      * Get route parameters extracted from the URI.
      *
-     * @return array
+     * @param string|null $key Optional key to get specific value
+     * @return mixed Returns specific value if key provided, otherwise returns all route params
      */
-    public function routeParams(?string $key = null): array {
-        return $this->route()->parseParameters($this->uri());
+    public function routeParams(?string $key = null): mixed {
+        $params = $this->route()->parseParameters($this->uri());
+        if ($key === null) {
+            return $params;
+        }
+        return $params[$key] ?? null;
     }
 }

@@ -118,7 +118,7 @@ class Response {
         }
     }
 
-    public static function json(array $data): self {
+    public static function json(mixed $data): self {
         return (new self())
          ->setContentType('application/json')
          ->setBody(json_encode($data));
