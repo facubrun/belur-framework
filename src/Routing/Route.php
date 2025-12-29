@@ -9,11 +9,11 @@ use Closure;
  */
 class Route {
     protected string $uri;
-    protected \Closure $action;
+    protected Closure $action;
     protected string $regex;
     protected array $parameters;
 
-    public function __construct(string $uri, \Closure $action) {
+    public function __construct(string $uri, Closure $action) {
         $this->uri = $uri;
         $this->action = $action;
         $this->regex = preg_replace('/\{([a-zA-Z]+)\}/', '([a-zA-Z0-9_]+)', $uri);
