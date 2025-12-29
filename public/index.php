@@ -36,9 +36,9 @@ $app->router->delete('/test', function() {
 
 
 class AuthMiddleware implements Middleware {
-    public function handle(Request $request, callable $next): Response {
-        if ($request->headers()['Authorization'] !== 'test') {
-            return Response::json(['error' => 'Unauthorized'], 401);
+    public function handle(Request $request, Closure $next): Response {
+        if ($request->headers('Authorization') !== 'test') {
+            return Response::json(['message' => 'Unauthorized'])->setStatus(401);
         }
         return $next($request); // llama al siguiente middleware
     }

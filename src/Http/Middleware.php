@@ -2,6 +2,8 @@
 
 namespace Belur\Http;
 
+use Closure;
+
 /**
  * Middleware interface.
  */
@@ -14,6 +16,6 @@ interface Middleware {
      * @param callable $next
      * @return Response
      */
-    public function handle(Request $request, callable $next): Response;
+    public function handle(Request $request, Closure $next): Response;
 
 }

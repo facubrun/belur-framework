@@ -83,7 +83,7 @@ class Route {
      * @return self
      */
     public function setMiddlewares(array $middlewares): self {
-        $this->middlewares[] = array_map(fn ($middleware) => new $middleware(), $middlewares);
+        $this->middlewares = array_map(fn ($middleware) => new $middleware(), $middlewares);
         return $this;
     }
 
