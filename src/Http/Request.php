@@ -44,6 +44,13 @@ class Request {
     protected array $query = [];
 
     /**
+     * Request headers.
+     *
+     * @var array
+     */
+    protected array $headers = [];
+
+    /**
      * Get request URI.
      *
      * @return string
@@ -62,6 +69,33 @@ class Request {
         $this->uri = $uri;
         return $this;
     }
+
+    /**
+     * Get request headers.
+     *
+     * @return array
+     */
+    public function headers(?string $key = null): array|string|null {
+        if (is_null($key)) {
+            return $this->headers;
+        } else {
+            return $this->headers[strtolower($key)] ?? null;
+        }
+    }
+
+    /**
+     * Set request headers.
+     *
+     * @param array $headers
+     * @return self
+     */
+    public function setHeaders(array $headers): self {
+        foreach ($headers as $key => $value) {
+            $this->headers[strtolower($key)] = $value;
+        }
+        return $this;
+    }
+
 
     /**
      * Get route for this request.
@@ -110,10 +144,11 @@ class Request {
      * @return mixed Returns specific value if key provided, otherwise returns all data
      */
     public function data(?string $key = null): mixed {
-        if ($key === null) {
+        if (is_null($key)) {
             return $this->data;
+        } else {
+            return $this->data[$key] ?? null;
         }
-        return $this->data[$key] ?? null;
     }
 
     /**
@@ -134,10 +169,11 @@ class Request {
      * @return mixed Returns specific value if key provided, otherwise returns all query params
      */
     public function query(?string $key = null): mixed {
-        if ($key === null) {
+        if (is_null($key)) {
             return $this->query;
+        } else {
+            return $this->query[$key] ?? null;
         }
-        return $this->query[$key] ?? null;
     }
 
     /**
@@ -159,9 +195,10 @@ class Request {
      */
     public function routeParams(?string $key = null): mixed {
         $params = $this->route()->parseParameters($this->uri());
-        if ($key === null) {
+        if (is_null($key)) {
             return $params;
+        } else {
+            return $params[$key] ?? null;
         }
-        return $params[$key] ?? null;
     }
 }

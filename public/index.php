@@ -3,8 +3,10 @@
 require_once  '../vendor/autoload.php';
 
 use Belur\App;
+use Belur\Http\Middleware;
 use Belur\Http\Request;
 use Belur\Http\Response;
+use Belur\Routing\Route;
 
 $app = App::bootstrap();
 
@@ -32,5 +34,17 @@ $app->router->delete('/test', function() {
     return 'DELETE OK.';
 });
 
+
+class AuthMiddleware implements Middleware {
+    public function handle(Request $request, callable $next): Response {
+        if ($request->headers()['Authorization'] !== 'test') {
+            return Response::json(['error' => 'Unauthorized'], 401);
+        }
+        return $next($request); // llama al siguiente middleware
+    }
+}
+
+Route::get('/middlewares', fn (Request $request) => Response::json(['message' => 'Middleware works!']))
+    ->setMiddlewares([AuthMiddleware::class]);
 
 $app->run();
