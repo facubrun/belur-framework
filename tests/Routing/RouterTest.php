@@ -108,7 +108,7 @@ class RouterTest extends TestCase {
 
     }
 
-    public function test_middleware_stack_can_be_sttoped(){
+    public function test_middleware_stack_can_be_sttoped() {
         $middleware1 = new class {
             public function handle(Request $request, Closure $next): Response {
                 // No llama a $next() para detener cadena

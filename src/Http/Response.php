@@ -2,6 +2,9 @@
 
 namespace Belur\Http;
 
+use Belur\App;
+use Belur\Container\Container;
+
 /**
  * HTTP Response that will be sent to the client.
  */
@@ -137,5 +140,13 @@ class Response {
         return (new self())
          ->setStatus(302)
          ->setHeader('Location', $url);
+    }
+
+    public static function view(string $viewName): Response {
+        $content = Container::singleton(App::class)->view->render($viewName);
+
+        return (new self())
+         ->setContentType('text/html')
+         ->setBody($content);
     }
 }

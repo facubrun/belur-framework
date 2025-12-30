@@ -9,6 +9,8 @@ use Belur\Http\Response;
 use Belur\Routing\Router;
 use Belur\Server\PhpNativeServer;
 use Belur\Server\Server;
+use Belur\View\BelurEngine;
+use Belur\View\View;
 
 class App {
     public Router $router;
@@ -17,11 +19,14 @@ class App {
 
     public Server $server;
 
+    public View $view;
+
     public static function bootstrap(): App {
         $app = Container::singleton(self::class);
         $app->router = new Router();
         $app->server = new PhpNativeServer();
         $app->request = $app->server->getRequest();
+        $app->view = new BelurEngine(__DIR__ . '/../views');
 
         return $app;
     }
