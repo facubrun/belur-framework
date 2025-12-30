@@ -11,15 +11,15 @@ use Belur\Routing\Route;
 $app = App::bootstrap();
 
 $app->router->get('/test/{param}', function(Request $request) {
-    return Response::json($request->routeParams('param'));
+    return json($request->routeParams('param'));
 });
 
 $app->router->post('/test', function(Request $request) {
-    return Response::json($request->query('test'));
+    return json($request->query('test'));
 });
 
 $app->router->get('/redirect', function(Request $request) {
-    return Response::redirect('/test');
+    return redirect('/test');
 });
 
 $app->router->put('/test', function() {
@@ -38,15 +38,15 @@ $app->router->delete('/test', function() {
 class AuthMiddleware implements Middleware {
     public function handle(Request $request, Closure $next): Response {
         if ($request->headers('Authorization') !== 'test') {
-            return Response::json(['message' => 'Unauthorized'])->setStatus(401);
+            return json(['message' => 'Unauthorized'])->setStatus(401);
         }
         return $next($request); // llama al siguiente middleware
     }
 }
 
-Route::get('/middlewares', fn (Request $request) => Response::json(['message' => 'Middleware works!']))
+Route::get('/middlewares', fn (Request $request) => json(['message' => 'Middleware works!']))
     ->setMiddlewares([AuthMiddleware::class]);
 
-Route::get('/html', fn(Request $request) => Response::view('home', ['user' => 'Test']));
+Route::get('/html', fn(Request $request) => view('home', ['user' => 'Test']));
 
 $app->run();

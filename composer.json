@@ -6,7 +6,11 @@
     "autoload": {
         "psr-4": {
             "Belur\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helpers/App.php",
+            "src/Helpers/Http.php"
+        ]
     },
     "scripts": {
         "tests": "phpunit --colors=always --testdox tests/",

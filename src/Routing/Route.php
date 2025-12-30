@@ -2,10 +2,9 @@
 
 namespace Belur\Routing;
 
-use Belur\App;
-use Belur\Container\Container;
-use Belur\Http\Middleware;
 use Closure;
+
+use function Belur\Helpers\app;
 
 /**
  * Manipulation of routes
@@ -131,6 +130,6 @@ class Route {
     }
 
     public static function get(string $uri, Closure $action): Route {
-        return Container::resolve(App::class)->router->get($uri, $action);
+        return app()->router->get($uri, $action);
     }
 }

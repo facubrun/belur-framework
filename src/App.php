@@ -12,6 +12,8 @@ use Belur\Server\Server;
 use Belur\View\BelurEngine;
 use Belur\View\View;
 
+use function Belur\Helpers\singleton;
+
 class App {
     public Router $router;
 
@@ -22,7 +24,7 @@ class App {
     public View $view;
 
     public static function bootstrap(): App {
-        $app = Container::singleton(self::class);
+        $app = singleton(self::class);
         $app->router = new Router();
         $app->server = new PhpNativeServer();
         $app->request = $app->server->getRequest();

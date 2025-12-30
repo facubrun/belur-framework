@@ -2,8 +2,7 @@
 
 namespace Belur\Http;
 
-use Belur\App;
-use Belur\Container\Container;
+use function Belur\Helpers\app;
 
 /**
  * HTTP Response that will be sent to the client.
@@ -143,7 +142,7 @@ class Response {
     }
 
     public static function view(string $viewName, array $params = [], ?string $layout = null): Response {
-        $content = Container::resolve(App::class)->view->render($viewName, $params, $layout);
+        $content = app()->view->render($viewName, $params, $layout);
 
         return (new self())
          ->setContentType('text/html')
