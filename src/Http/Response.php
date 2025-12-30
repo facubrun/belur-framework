@@ -142,8 +142,8 @@ class Response {
          ->setHeader('Location', $url);
     }
 
-    public static function view(string $viewName): Response {
-        $content = Container::singleton(App::class)->view->render($viewName);
+    public static function view(string $viewName, array $params = [], ?string $layout = null): Response {
+        $content = Container::resolve(App::class)->view->render($viewName, $params, $layout);
 
         return (new self())
          ->setContentType('text/html')
