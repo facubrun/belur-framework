@@ -55,7 +55,7 @@ Route::post('/validate', function(Request $request) {
     $validated = $request->validate([
         'test' => Rule::required(),
         'num' => Rule::number(),
-        'email' => [Rule::required(), Rule::email()],
+        'email' => ['required', 'email'],
     ],
     [
         'email' => [
