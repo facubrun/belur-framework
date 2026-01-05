@@ -7,6 +7,8 @@ use Belur\Http\Middleware;
 use Belur\Http\Request;
 use Belur\Http\Response;
 use Belur\Routing\Route;
+use Belur\Validation\Rule;
+use Belur\Validation\Rules\Required;
 
 $app = App::bootstrap();
 
@@ -48,5 +50,20 @@ Route::get('/middlewares', fn (Request $request) => json(['message' => 'Middlewa
     ->setMiddlewares([AuthMiddleware::class]);
 
 Route::get('/html', fn(Request $request) => view('home', ['user' => 'Test']));
+
+Route::post('/validate', function(Request $request) {
+    $validated = $request->validate([
+        'test' => Rule::required(),
+        'num' => Rule::number(),
+        'email' => [Rule::required(), Rule::email()],
+    ],
+    [
+        'email' => [
+            Required::class => 'MENSAJE TEST.'
+        ]
+    ]);
+
+    return json(['validated' => $validated]);
+});
 
 $app->run();

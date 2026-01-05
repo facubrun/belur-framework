@@ -3,6 +3,7 @@
 namespace Belur\Http;
 
 use Belur\Routing\Route;
+use Belur\Validation\Validator;
 
 /**
  * HTTP Request received from the client.
@@ -200,5 +201,11 @@ class Request {
         } else {
             return $params[$key] ?? null;
         }
+    }
+
+    public function validate(array $rules, array $messages = []): array {
+        $validator = new Validator($this->data(), $rules, $messages);
+
+        return $validator->validate($rules, $messages);
     }
 }

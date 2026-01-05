@@ -9,8 +9,10 @@ use Belur\Http\Response;
 use Belur\Routing\Router;
 use Belur\Server\PhpNativeServer;
 use Belur\Server\Server;
+use Belur\Validation\Exceptions\ValidationException;
 use Belur\View\BelurEngine;
 use Belur\View\View;
+use Throwable;
 
 use function Belur\Helpers\singleton;
 
@@ -38,8 +40,19 @@ class App {
             $response = $this->router->resolve($this->request);
             $this->server->sendResponse($response);
         } catch (HttpNotFoundException $e) {
-            $response = Response::text('404 Not Found')->setStatus(404);
-            $this->server->sendResponse($response);
+            $this->abort(Response::text('Resource not found')->setStatus(404));
+        } catch (ValidationException $e) {
+            $this->abort(Response::json($e->errors())->setStatus(422));
+        } catch (Throwable $e) {
+            $response = Response::json([
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ]);
+            $this->abort($response);
         }
+    }
+
+    public function abort(Response $response) {
+        $this->server->sendResponse($response);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lune\Tests\Http;
+namespace Belur\Tests\Http;
 
 use Belur\Http\Response;
 use PHPUnit\Framework\TestCase;
