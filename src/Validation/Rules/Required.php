@@ -7,7 +7,7 @@ class Required implements ValidationRule {
         return "This field is required.";
     }
 
-    public function isValid(string $field, string $data): bool {
+    public function isValid(string $field, array $data): bool {
         return isset($data[$field]) && $data[$field] !== '';
     }
 }

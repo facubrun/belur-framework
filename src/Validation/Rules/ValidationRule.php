@@ -6,5 +6,5 @@ interface ValidationRule {
     
     public function message(): string;
 
-    public function isValid(string $field, string $data): bool;
+    public function isValid(string $field, array $data): bool;
 }

@@ -13,8 +13,8 @@ class RequiredWith implements ValidationRule {
         return "This field is required when {$this->withField} is present.";
     }
 
-    public function isValid(string $field, string $data): bool {
-        if(isset($data[$this->withField]) && ($data[$this->withField])) {
+    public function isValid(string $field, array $data): bool {
+        if(isset($data[$this->withField]) && ($data[$this->withField]) != '') {
             return isset($data[$field]) && !empty($data[$field]);
         }
         return true;
