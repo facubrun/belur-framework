@@ -8,8 +8,9 @@
             "Belur\\": "src/"
         },
         "files": [
-            "src/Helpers/App.php",
-            "src/Helpers/Http.php"
+            "src/Helpers/app.php",
+            "src/Helpers/http.php",
+            "src/Helpers/string.php"
         ]
     },
     "scripts": {
