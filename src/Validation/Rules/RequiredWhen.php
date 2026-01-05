@@ -2,6 +2,8 @@
 
 namespace Belur\Validation\Rules;
 
+use Belur\Validation\Exceptions\RuleParserException;
+
 class RequiredWhen implements ValidationRule {
 
     public function __construct(private string $otherField, private string $operator, private $value) {
@@ -26,6 +28,7 @@ class RequiredWhen implements ValidationRule {
             '<'  => $data[$this->otherField] < $this->value,
             '>=' => $data[$this->otherField] >= $this->value,
             '<=' => $data[$this->otherField] <= $this->value,
+            default => throw new RuleParserException("Unknown operator: {$this->operator}")
         };
         
         if ($isRequired) {

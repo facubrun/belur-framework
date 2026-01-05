@@ -10,6 +10,7 @@ use Belur\Routing\Router;
 use Belur\Server\PhpNativeServer;
 use Belur\Server\Server;
 use Belur\Validation\Exceptions\ValidationException;
+use Belur\Validation\Rule;
 use Belur\View\BelurEngine;
 use Belur\View\View;
 use Throwable;
@@ -31,6 +32,7 @@ class App {
         $app->server = new PhpNativeServer();
         $app->request = $app->server->getRequest();
         $app->view = new BelurEngine(__DIR__ . '/../views');
+        Rule::loadDefaultRules();
 
         return $app;
     }
@@ -45,10 +47,11 @@ class App {
             $this->abort(Response::json($e->errors())->setStatus(422));
         } catch (Throwable $e) {
             $response = Response::json([
+                'error' => $e::class,
                 'message' => $e->getMessage(),
                 'trace' => $e->getTrace()
             ]);
-            $this->abort($response);
+            $this->abort($response->setStatus(500));
         }
     }
 

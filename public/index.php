@@ -53,13 +53,13 @@ Route::get('/html', fn(Request $request) => view('home', ['user' => 'Test']));
 
 Route::post('/validate', function(Request $request) {
     $validated = $request->validate([
-        'test' => Rule::required(),
-        'num' => Rule::number(),
-        'email' => ['required', 'email'],
+        'test' => 'required',
+        'num' => 'number',
+        'email' => ['required_when:num,>,2', 'email'],
     ],
     [
         'email' => [
-            Required::class => 'MENSAJE TEST.'
+            'email' => 'MENSAJE TEST.'
         ]
     ]);
 

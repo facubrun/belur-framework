@@ -49,7 +49,7 @@ class Rule {
             throw new RuleParserException("Rule {$ruleName} requires parameters, but none has been passed.");
         }
 
-        return $class()->newInstance();
+        return $class->newInstance();
     }
 
     public static function parseRuleWithParameters(string $ruleName, string $params): ValidationRule {
@@ -67,7 +67,7 @@ class Rule {
             ));
         }
 
-        return $class()->newInstance(...$givenParams);
+        return $class->newInstanceArgs($givenParams);
     }
 
     public static function email(): ValidationRule {
