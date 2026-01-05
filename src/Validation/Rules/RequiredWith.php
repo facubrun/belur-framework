@@ -14,7 +14,7 @@ class RequiredWith implements ValidationRule {
     }
 
     public function isValid(string $field, array $data): bool {
-        if(isset($data[$this->withField]) && ($data[$this->withField]) != '') {
+        if (isset($data[$this->withField]) && ($data[$this->withField]) != '') {
             return isset($data[$field]) && !empty($data[$field]);
         }
         return true;

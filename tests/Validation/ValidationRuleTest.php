@@ -7,7 +7,7 @@ use Belur\Validation\Rules\Required;
 use Belur\Validation\Rules\RequiredWith;
 use PHPUnit\Framework\TestCase;
 
-class ValidationRuleTest  extends TestCase{
+class ValidationRuleTest extends TestCase {
     public static function emails() {
         return [
             ["test@test.com", true],

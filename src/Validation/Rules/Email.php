@@ -15,7 +15,7 @@ class Email implements ValidationRule {
 
         if (count($split) != 2) {
             return false;
-        }   
+        }
 
         [$username, $domain] = $split;
 
@@ -23,12 +23,12 @@ class Email implements ValidationRule {
 
         if (count($split) != 2) {
             return false;
-        }  
+        }
 
         [$label, $topLevelDomain] = $split;
 
-        return strlen($username) > 0 
-        && strlen($label) > 0 
+        return strlen($username) > 0
+        && strlen($label) > 0
         && strlen($topLevelDomain) > 0;
     }
 }
