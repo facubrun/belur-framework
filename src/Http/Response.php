@@ -148,4 +148,12 @@ class Response {
          ->setContentType('text/html')
          ->setBody($content);
     }
+
+    public function withErrors(array $errors, int $status = 400): self {
+        $this->setStatus($status);
+        session()->flash('_errors', $errors);
+        session()->flash('_old', request()->data());
+
+        return $this;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Belur;
 
+use Belur\Http\HttpMethod;
 use Belur\Http\HttpNotFoundException;
 use Belur\Http\Request;
 use Belur\Http\Response;
@@ -43,14 +44,25 @@ class App {
         return $app;
     }
 
+    public function prepareNextRequest(): void {
+        if ($this->request->method() == HttpMethod::GET) {
+            $this->session->set('_previous', $this->request->uri());
+        }
+    }
+
+    public function terminate(Response $response) {
+        $this->prepareNextRequest();
+        $this->server->sendResponse($response);
+    }
+
     public function run() {
         try {
             $response = $this->router->resolve($this->request);
-            $this->server->sendResponse($response);
+            $this->terminate($response);
         } catch (HttpNotFoundException $e) {
             $this->abort(Response::text('Resource not found')->setStatus(404));
         } catch (ValidationException $e) {
-            $this->abort(Response::json($e->errors())->setStatus(422));
+            $this->abort(back()->withErrors($e->errors(), 422));
         } catch (Throwable $e) {
             $response = Response::json([
                 'error' => $e::class,
@@ -62,7 +74,7 @@ class App {
     }
 
     public function abort(Response $response) {
-        $this->server->sendResponse($response);
+        $this->terminate($response);
     }
 
     public function session(): Session {
