@@ -2,13 +2,14 @@
 
 namespace Belur;
 
-use Belur\Container\Container;
 use Belur\Http\HttpNotFoundException;
 use Belur\Http\Request;
 use Belur\Http\Response;
 use Belur\Routing\Router;
 use Belur\Server\PhpNativeServer;
 use Belur\Server\Server;
+use Belur\Session\PhpNativeSessionStorage;
+use Belur\Session\Session;
 use Belur\Validation\Exceptions\ValidationException;
 use Belur\Validation\Rule;
 use Belur\View\BelurEngine;
@@ -26,12 +27,17 @@ class App {
 
     public View $view;
 
+    public Session $session;
+
     public static function bootstrap(): App {
         $app = singleton(self::class);
         $app->router = new Router();
         $app->server = new PhpNativeServer();
         $app->request = $app->server->getRequest();
         $app->view = new BelurEngine(__DIR__ . '/../views');
+        $app->session = new Session(
+            new PhpNativeSessionStorage()
+        );
         Rule::loadDefaultRules();
 
         return $app;

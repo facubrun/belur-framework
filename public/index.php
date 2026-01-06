@@ -7,8 +7,6 @@ use Belur\Http\Middleware;
 use Belur\Http\Request;
 use Belur\Http\Response;
 use Belur\Routing\Route;
-use Belur\Validation\Rule;
-use Belur\Validation\Rules\Required;
 
 $app = App::bootstrap();
 
@@ -64,6 +62,11 @@ Route::post('/validate', function(Request $request) {
     ]);
 
     return json(['validated' => $validated]);
+});
+
+Route::get('/session', function (Request $request) {
+    session()->remove('test');
+    return json(['id' => session()->id(), 'test' => session()->get('test')]);
 });
 
 $app->run();
