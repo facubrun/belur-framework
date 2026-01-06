@@ -9,6 +9,10 @@ class PhpNativeSessionStorage implements SessionStorage {
             throw new \RuntimeException("Failed to start the session.");
         }
     }
+
+    public function save() {
+        session_write_close();
+    }
     
     public function flash(string $key, mixed $value) {
         

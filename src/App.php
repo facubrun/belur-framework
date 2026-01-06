@@ -64,4 +64,8 @@ class App {
     public function abort(Response $response) {
         $this->server->sendResponse($response);
     }
+
+    public function session(): Session {
+        return $this->session;
+    }
 }
