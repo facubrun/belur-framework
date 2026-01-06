@@ -4,6 +4,8 @@ namespace Belur\Tests\Helpers;
 
 use PHPUnit\Framework\TestCase;
 
+use function Belur\Helpers\snake_case;
+
 class StringHelpersTest extends TestCase {
     public static function strings() {
         return [

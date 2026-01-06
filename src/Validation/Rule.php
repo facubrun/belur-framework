@@ -13,6 +13,8 @@ use Belur\Validation\Rules\RequiredWith;
 use Belur\Validation\Rules\ValidationRule;
 use ReflectionClass;
 
+use function Belur\Helpers\snake_case;
+
 class Rule {
     private static array $rules = [];
 

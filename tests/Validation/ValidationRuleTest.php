@@ -2,6 +2,7 @@
 
 namespace Belur\Validation;
 
+use Belur\Validation\Exceptions\RuleParserException;
 use Belur\Validation\Rules\Number;
 use Belur\Validation\Rules\Email;
 use Belur\Validation\Rules\LessThan;
@@ -131,5 +132,12 @@ class ValidationRuleTest extends TestCase {
     public function test_required_when($otherField, $operator, $value, $data, $field, $expected) {
         $rule = new RequiredWhen($otherField, $operator, $value);
         $this->assertEquals($expected, $rule->isValid($field, $data));
+    }
+
+    public function test_required_when_throws_parse_rule_exception_when_operator_is_invalid() {
+        $this->expectException(RuleParserException::class);
+        $rule = new RequiredWhen('other', 'xd', 'test');
+        $data = ['other' => 'test example', 'test' => 1];
+        $rule->isValid('test', $data);
     }
 }

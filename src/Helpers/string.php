@@ -1,5 +1,7 @@
 <?php
 
+namespace Belur\Helpers;
+
 function snake_case(string $str): string {
     $snake_cased = [];
     $skip = [' ', '-', '.', '/', ';', ':', '\\', '.', ',', '_'];
