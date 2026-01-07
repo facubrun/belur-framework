@@ -88,4 +88,16 @@ Route::get('/users', function(Request $request) {
     return json(['users' => DB::statement('SELECT * FROM users')]);
 });
 
+class User extends Belur\Database\Model {
+
+}
+
+Route::post('/user/model', function(Request $request) {
+    $user = new User();
+    $user->name = $request->data('name');
+    $user->email = $request->data('email');
+    $user->save();
+    return json(['user' => $user]);
+});
+
 $app->run();

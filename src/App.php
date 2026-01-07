@@ -4,6 +4,7 @@ namespace Belur;
 
 use Belur\Database\Drivers\DatabaseDriver;
 use Belur\Database\Drivers\PDODriver;
+use Belur\Database\Model;
 use Belur\Http\HttpMethod;
 use Belur\Http\HttpNotFoundException;
 use Belur\Http\Request;
@@ -52,6 +53,7 @@ class App {
             'root',
             ''
         );
+        Model::setDatabaseDriver($app->database);
         Rule::loadDefaultRules();
 
         return $app;
