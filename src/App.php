@@ -2,6 +2,8 @@
 
 namespace Belur;
 
+use Belur\Database\Drivers\DatabaseDriver;
+use Belur\Database\Drivers\PDODriver;
 use Belur\Http\HttpMethod;
 use Belur\Http\HttpNotFoundException;
 use Belur\Http\Request;
@@ -30,6 +32,8 @@ class App {
 
     public Session $session;
 
+    public DatabaseDriver $database;
+
     public static function bootstrap(): App {
         $app = singleton(self::class);
         $app->router = new Router();
@@ -38,6 +42,15 @@ class App {
         $app->view = new BelurEngine(__DIR__ . '/../views');
         $app->session = new Session(
             new PhpNativeSessionStorage()
+        );
+        $app->database = new PDODriver();
+        $app->database->connect(
+            'mysql',
+            'localhost',
+            3306,
+            'belur_framework',
+            'root',
+            ''
         );
         Rule::loadDefaultRules();
 
@@ -53,6 +66,8 @@ class App {
     public function terminate(Response $response) {
         $this->prepareNextRequest();
         $this->server->sendResponse($response);
+        $this->database->close();
+        exit();
     }
 
     public function run() {

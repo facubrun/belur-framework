@@ -3,6 +3,7 @@
 require_once  '../vendor/autoload.php';
 
 use Belur\App;
+use Belur\Database\DB;
 use Belur\Http\Middleware;
 use Belur\Http\Request;
 use Belur\Http\Response;
@@ -76,6 +77,15 @@ Route::post('/form', function (Request $request) {
         'email' => 'email',
         'name' => 'required'
     ]));
+});
+
+Route::post('/user', function(Request $request) {
+    $results = DB::statement('INSERT INTO users (name,email) VALUES (?, ?)', [$request->data('name'), $request->data('email')]);
+    return json(['message' => 'ok']);
+});
+
+Route::get('/users', function(Request $request) {
+    return json(['users' => DB::statement('SELECT * FROM users')]);
 });
 
 $app->run();
