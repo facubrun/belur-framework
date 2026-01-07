@@ -35,12 +35,101 @@ abstract class Model { // abstracta para que no se pueda instanciar directamente
         return $this->attributes[$name] ?? null;
     }
 
-    public function save(): void {
+    protected function setAttributes(array $attributes): static {
+        foreach ($attributes as $key => $value) {
+            $this->__set($key, $value);
+        }
+        
+        return $this;
+    }
+
+    protected function massAssign(array $attributes): static {
+        if (count($this->fillable) == 0) {
+            throw new \Error("Model " . get_class($this) . " does not have fillable attributes defined.");
+        }
+        
+        foreach ($attributes as $key => $value) {
+            if (in_array($key, $this->fillable)) {
+                $this->__set($key, $value);
+            }
+        }
+
+        return $this;
+    }
+
+    public function save(): static {
         $databaseColumns = implode(',', array_keys($this->attributes));
         $bind = implode(',', array_fill(0, count($this->attributes), '?'));
         self::$driver->statement(
             "INSERT INTO $this->table ($databaseColumns) VALUES ($bind)",
             array_values($this->attributes)
         );
+        return $this;
+    }
+
+    public static function create(array $attributes): static {
+        return (new static())->massAssign($attributes)->save();
+    }
+
+    public function toArray(): array {
+        return array_filter(
+            $this->attributes,
+            fn ($key) => !in_array($key, $this->hidden),
+            ARRAY_FILTER_USE_KEY
+        );
+    }
+
+    public static function first(): ?static {
+        $model = new static();
+        $rows = self::$driver->statement("SELECT * FROM $model->table LIMIT 1");
+        
+        if (count($rows) == 0) {
+            return null;
+        }
+
+        return $model->setAttributes($rows[0]);
+    }
+
+    public static function find(string|int $id): ?static {
+        $model = new static();
+        $rows = self::$driver->statement("SELECT * FROM $model->table WHERE $model->primaryKey = ?", [$id]);
+        
+        if (count($rows) == 0) {
+            return null;
+        }
+
+        return $model->setAttributes($rows[0]);
+    }
+
+    public static function all(): array {
+        $model = new static();
+        $rows = self::$driver->statement("SELECT * FROM $model->table");
+        
+        if (count($rows) == 0) {
+            return [];
+        }
+
+        $models = [];
+        foreach ($rows as $row) {
+            $models[] = (new static())->setAttributes($row);
+        }
+        
+        return $models;
+    }
+
+    public static function where(string $column, mixed $value): array {
+        $model = new static();
+        $rows = self::$driver->statement("SELECT * FROM $model->table WHERE $column = ?", [$value]);
+        
+        if (count($rows) == 0) {
+            return [];
+        }
+
+        $models = [];
+        foreach ($rows as $row) {
+            $models[] = (new static())->setAttributes($row);
+        }
+        
+        return $models;
     }
 }

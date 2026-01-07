@@ -89,15 +89,39 @@ Route::get('/users', function(Request $request) {
 });
 
 class User extends Belur\Database\Model {
-
+    protected array $fillable = ['name', 'email'];
 }
 
 Route::post('/user/model', function(Request $request) {
-    $user = new User();
-    $user->name = $request->data('name');
-    $user->email = $request->data('email');
-    $user->save();
-    return json(['user' => $user]);
+    //$user = new User();
+    //$user->name = $request->data('name');
+    //$user->email = $request->data('email');
+    //$user->save();
+    return json(User::create($request->data())->toArray());
+});
+
+Route::get('/user/query', function(Request $request) {
+    return json(User::first()->toArray());
+});
+
+Route::get('/user/all', function(Request $request) {
+    $users = User::all();
+    return json([
+        'count' => count($users),
+        'users' => array_map(fn($user) => $user?->toArray() ?? 'null', $users)
+    ]);
+});
+
+Route::get('/user/where', function(Request $request) {
+    $users = User::where('name', 'testaco');
+    return json([
+        'count' => count($users),
+        'users' => array_map(fn($user) => $user?->toArray() ?? 'null', $users)
+    ]);
+});
+
+Route::get('/user/{id}', function(Request $request) {
+    return json(User::find($request->routeParams('id'))->toArray());
 });
 
 $app->run();
