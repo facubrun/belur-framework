@@ -136,4 +136,41 @@ abstract class Model { // abstracta para que no se pueda instanciar directamente
         
         return $models;
     }
+
+    public static function firstWhere(string $column, mixed $value): ?static {
+        $model = new static();
+        $rows = self::$driver->statement("SELECT * FROM $model->table WHERE $column = ? LIMIT 1", [$value]);
+        
+        if (count($rows) == 0) {
+            return null;
+        }
+
+        return $model->setAttributes($rows[0]);
+    }
+
+    public function update(): static {
+        if ($this->insertTimestamps) {
+            $this->attributes['updated_at'] = date('Y-m-d H:m:s');
+        }
+
+        $databaseColumns = array_keys($this->attributes);
+        $bind = implode(',', array_map(fn($col) => "$col = ?", $databaseColumns));
+        $id = $this->attributes[$this->primaryKey];
+        self::$driver->statement(
+            "UPDATE $this->table SET $bind WHERE $this->primaryKey = ?",
+            array_merge(array_values($this->attributes), [$id])
+        );
+
+        return $this;
+    }        
+
+    public function delete() {
+        $id = $this->attributes[$this->primaryKey];
+        self::$driver->statement(
+            "DELETE FROM $this->table WHERE $this->primaryKey = ?",
+            [$id]
+        );
+
+        return $this;
+    }
 }

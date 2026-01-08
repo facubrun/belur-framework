@@ -93,10 +93,6 @@ class User extends Belur\Database\Model {
 }
 
 Route::post('/user/model', function(Request $request) {
-    //$user = new User();
-    //$user->name = $request->data('name');
-    //$user->email = $request->data('email');
-    //$user->save();
     return json(User::create($request->data())->toArray());
 });
 
@@ -122,6 +118,21 @@ Route::get('/user/where', function(Request $request) {
 
 Route::get('/user/{id}', function(Request $request) {
     return json(User::find($request->routeParams('id'))->toArray());
+});
+
+Route::post('/users/{id}/update', function(Request $request) {
+    $user = User::find($request->routeParams('id'));
+
+    $user->name = $request->data('name');
+    $user->email = $request->data('email');
+
+    return json($user->update()->toArray());
+});
+
+Route::delete('/users/{id}/delete', function(Request $request) {
+    $user = User::find($request->routeParams('id'));
+
+    return json($user->delete()->toArray());
 });
 
 $app->run();
