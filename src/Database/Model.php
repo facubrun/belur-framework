@@ -154,7 +154,7 @@ abstract class Model { // abstracta para que no se pueda instanciar directamente
         }
 
         $databaseColumns = array_keys($this->attributes);
-        $bind = implode(',', array_map(fn($col) => "$col = ?", $databaseColumns));
+        $bind = implode(',', array_map(fn ($col) => "$col = ?", $databaseColumns));
         $id = $this->attributes[$this->primaryKey];
         self::$driver->statement(
             "UPDATE $this->table SET $bind WHERE $this->primaryKey = ?",
@@ -162,7 +162,7 @@ abstract class Model { // abstracta para que no se pueda instanciar directamente
         );
 
         return $this;
-    }        
+    }
 
     public function delete() {
         $id = $this->attributes[$this->primaryKey];
