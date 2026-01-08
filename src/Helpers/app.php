@@ -9,6 +9,6 @@ function app($class = App::class): mixed {
     return Container::resolve($class);
 }
 
-function singleton(string $class): mixed {
-    return Container::singleton($class);
+function singleton(string $class, string|callable|null $build): mixed {
+    return Container::singleton($class, $build);
 }

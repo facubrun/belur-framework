@@ -44,7 +44,7 @@ class App {
         $app->session = new Session(
             new PhpNativeSessionStorage()
         );
-        $app->database = new PDODriver();
+        $app->database = singleton(DatabaseDriver::class, PDODriver::class);
         $app->database->connect(
             'mysql',
             'localhost',

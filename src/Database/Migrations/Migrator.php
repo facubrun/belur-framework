@@ -2,13 +2,52 @@
 
 namespace Belur\Database\Migrations;
 
+use Belur\Database\Drivers\DatabaseDriver;
+
 use function Belur\Helpers\snake_case;
 
 class Migrator {
 
-    public function __construct(private string $migrationsPath, private string $templatesPath) {
+    public function __construct(
+        private string $migrationsPath,
+        private string $templatesPath,
+        private DatabaseDriver $driver
+    ) {
         $this->migrationsPath = $migrationsPath;
         $this->templatesPath = $templatesPath;
+        $this->driver = $driver;
+    }
+
+    private function log(string $message) {
+        echo $message . "\n";
+    }
+
+    private function createMigrationTableIfNotExists() {
+        $this->driver->statement("CREATE TABLE IF NOT EXISTS migrations (
+            id INT AUTO_INCREMENT PRIMARY KEY, 
+            migration VARCHAR(255),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )");
+    }
+
+    public function migrate() {
+        $this->createMigrationTableIfNotExists();
+        
+        $migrated = $this->driver->statement("SELECT * FROM migrations");
+        $migrations = glob("$this->migrationsPath/*.php");
+
+        if (count($migrated) >= count($migrations)) {
+            $this->log("Nothing to migrate"); // No new migrations
+            return;
+        }
+
+        foreach (array_slice($migrations, count($migrated)) as $file) {
+            $migration = require $file;
+            $migration->up();
+            $name = basename($file);
+            $this->driver->statement("INSERT INTO migrations (migration) VALUES (?)", [$name]);
+            $this->log("Migrated: $name");
+        }
     }
 
     public function make(string $migrationName) {
