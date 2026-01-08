@@ -11,7 +11,8 @@ class Migrator {
     public function __construct(
         private string $migrationsPath,
         private string $templatesPath,
-        private ?DatabaseDriver $driver
+        private ?DatabaseDriver $driver,
+        private bool $logProgress = true
     ) {
         $this->migrationsPath = $migrationsPath;
         $this->templatesPath = $templatesPath;
@@ -67,7 +68,7 @@ class Migrator {
         } elseif (preg_match("/.*_(to|from)_.*_table/", $migrationName)) {
             $table = preg_replace_callback(
                 "/(.*)_(to|from)_(.*)_table/",
-                fn ($matches) => $matches[2],
+                fn ($matches) => $matches[3],
                 $migrationName
             );
             $template = preg_replace('/\$UP|\$DOWN/', "ALTER TABLE $table", $template);

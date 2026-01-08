@@ -5,7 +5,7 @@ namespace Belur\Database\Drivers;
 use PDO;
 
 class PDODriver implements DatabaseDriver {
-    protected ?PDO $connection;
+    protected ?PDO $connection = null;
 
     public function connect(
         string $protocol,

@@ -18,32 +18,10 @@ class MockModelFillable extends Model {
 }
 
 class ModelTest extends TestCase {
+    use RefreshDatabase;
+
     protected ?DatabaseDriver $driver = null;
     
-    public function setUp(): void {
-        if ($this->driver == null) {
-            $this->driver = new PDODriver();
-            Model::setDatabaseDriver($this->driver);
-            try {
-                $this->driver->connect(
-                    'mysql',
-                    'localhost',
-                    3306,
-                    'belur_tests',
-                    'root',
-                    ''
-                );
-            } catch (PDOException $e) {
-                $this->markTestSkipped('Database connection could not be established: ' . $e->getMessage());
-            }
-        }
-    }
-
-    protected function tearDown(): void {
-        $this->driver->statement("DROP DATABASE IF EXISTS belur_tests");
-        $this->driver->statement("CREATE DATABASE belur_tests");
-    }
-
     private function createTestTable($name, $columns, $withTimestamps = true) {
         $sql = "CREATE TABLE $name (id INT AUTO_INCREMENT PRIMARY KEY, "
             . implode(', ', array_map(fn ($col) => "$col VARCHAR(255)", $columns));
