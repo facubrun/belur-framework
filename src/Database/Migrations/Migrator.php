@@ -11,7 +11,7 @@ class Migrator {
     public function __construct(
         private string $migrationsPath,
         private string $templatesPath,
-        private DatabaseDriver $driver
+        private ?DatabaseDriver $driver
     ) {
         $this->migrationsPath = $migrationsPath;
         $this->templatesPath = $templatesPath;
@@ -94,5 +94,34 @@ class Migrator {
         file_put_contents("$this->migrationsPath/$fileName", $template);
 
         return $fileName;
+    }
+
+    public function rollback(?int $steps = null) {
+        $this->createMigrationTableIfNotExists();
+        
+        $migrated = $this->driver->statement("SELECT * FROM migrations");
+        $pending = count($migrated);
+
+        if ($pending == 0) {
+            $this->log("Nothing to rollback");
+            return;
+        }
+
+        if(is_null($steps) || $steps > $pending) {
+            $steps = $pending;
+        }
+
+        $migrations = array_slice(array_reverse(glob("$this->migrationsPath/*.php")), -$steps);
+
+        foreach ($migrations as $file) {
+            $migration = require $file;
+            $migration->down();
+            $name = basename($file);
+            $this->driver->statement("DELETE FROM migrations WHERE migration = ?", [$name]);
+            $this->log("Rolled back: $name");
+            if (--$steps <= 0) {
+                break;
+            }
+        }
     }
 }
