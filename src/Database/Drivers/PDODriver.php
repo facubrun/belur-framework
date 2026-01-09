@@ -20,6 +20,10 @@ class PDODriver implements DatabaseDriver {
         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
+    public function lastInsertId() {
+        return $this->connection->lastInsertId();
+    }
+
     public function close() {
         $this->connection = null;
     }
@@ -29,4 +33,5 @@ class PDODriver implements DatabaseDriver {
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
 }

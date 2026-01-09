@@ -76,6 +76,9 @@ abstract class Model { // abstracta para que no se pueda instanciar directamente
             "INSERT INTO $this->table ($databaseColumns) VALUES ($bind)",
             array_values($this->attributes)
         );
+
+        $this->{$this->primaryKey} = self::$driver->lastInsertId();
+
         return $this;
     }
 
