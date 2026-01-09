@@ -9,6 +9,7 @@ return [
         \Belur\Providers\SessionStorageServiceProvider::class,
         \Belur\Providers\ViewServiceProvider::class,
         \Belur\Providers\AuthenticatorServiceProvider::class,
+        \Belur\Providers\HasherServiceProvider::class,
     ],
     'runtime' => [
         \App\Providers\RuleServiceProvider::class,
