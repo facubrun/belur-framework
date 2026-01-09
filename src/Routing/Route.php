@@ -129,6 +129,12 @@ class Route {
         return array_combine($this->parameters, array_slice($arguments, 1)); // elimina el primer elemento que es la cadena completa
     }
 
+    public static function load(string $routesDirectory) {
+        foreach (glob($routesDirectory . '/*.php') as $routeFile) {
+            require_once $routeFile;
+        }
+    }
+
     public static function get(string $uri, Closure $action): Route {
         return app()->router->get($uri, $action);
     }

@@ -1,5 +1,7 @@
 <?php
 
+use Belur\App;
+
 return [
     'boot' => [
         \Belur\Providers\ServerServiceProvider::class,
@@ -8,6 +10,7 @@ return [
         \Belur\Providers\ViewServiceProvider::class,
     ],
     'runtime' => [
-        
+        \App\Providers\RuleServiceProvider::class,
+        \App\Providers\RouteServiceProvider::class,
     ]
 ];
