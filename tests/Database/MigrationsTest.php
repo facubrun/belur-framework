@@ -4,6 +4,7 @@ namespace Belur\Tests\Database;
 
 use Belur\Database\Drivers\DatabaseDriver;
 use Belur\Database\Migrations\Migrator;
+use PDO;
 use PDOException;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,7 @@ class MigrationsTest extends TestCase {
     protected Migrator $migrator;
 
     protected function setUp(): void {
-        if(!file_exists($this->migrationsPath)) {
+        if (!file_exists($this->migrationsPath)) {
             mkdir($this->migrationsPath);
         }
 
@@ -54,7 +55,7 @@ class MigrationsTest extends TestCase {
         }
     }
 
-    public static function migrationNames(){
+    public static function migrationNames() {
         return [
             ['create_products_table', __DIR__ . '/expected/create_products_table.php'],
             ['add_category_to_products_table', __DIR__ . '/expected/add_category_to_products_table.php'],
@@ -98,5 +99,42 @@ class MigrationsTest extends TestCase {
             $tableExists = $this->driver->statement("SHOW TABLES LIKE ?", [$table]);
             $this->assertCount(1, $tableExists);
         }
+    }
+
+    public function test_rollback_migrations() {
+        $this->setUpDatabase();
+        
+        $tables = ['users', 'products', 'sellers', 'orders', 'categories'];
+
+        // Migrar las tablas
+        $migrated = [];
+
+        foreach ($tables as $table) {
+            $migrated[] = $this->migrator->make("create_{$table}_table");
+        }
+
+        $this->migrator->migrate();
+
+        // Deshacer la última migración
+        $this->migrator->rollback(1);
+        $rows = $this->driver->statement("SELECT * FROM migrations");
+        $this->assertCount(4, $rows);
+        $this->assertEquals(
+            array_slice($migrated, 0, 4),
+            array_column($rows, 'migration')
+        );
+
+        try {
+            $table = $tables[count($tables) - 1];
+            $this->driver->statement("SELECT * FROM $table");
+            $this->fail("The table $table was not deleted after rollback.");
+        } catch (PDOException $e) {
+            $this->assertTrue(true);
+        }
+
+        // Deshacer todas las migraciones restantes
+        $this->migrator->rollback();
+        $rows = $this->driver->statement("SELECT * FROM migrations");
+        $this->assertCount(0, $rows);
     }
 }

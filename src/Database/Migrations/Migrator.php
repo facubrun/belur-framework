@@ -100,7 +100,7 @@ class Migrator {
     public function rollback(?int $steps = null) {
         $this->createMigrationTableIfNotExists();
         
-        $migrated = $this->driver->statement("SELECT * FROM migrations");
+        $migrated = $this->driver->statement("SELECT * FROM migrations ORDER BY id DESC");
         $pending = count($migrated);
 
         if ($pending == 0) {
@@ -108,21 +108,26 @@ class Migrator {
             return;
         }
 
-        if(is_null($steps) || $steps > $pending) {
+        if (is_null($steps) || $steps > $pending) {
             $steps = $pending;
         }
 
-        $migrations = array_slice(array_reverse(glob("$this->migrationsPath/*.php")), -$steps);
+        // Tomar las últimas N migraciones de la base de datos (ya están ordenadas DESC)
+        $migrationsToRollback = array_slice($migrated, 0, $steps);
 
-        foreach ($migrations as $file) {
+        foreach ($migrationsToRollback as $record) {
+            $migrationName = $record['migration'];
+            $file = "$this->migrationsPath/$migrationName";
+            
+            if (!file_exists($file)) {
+                $this->log("Migration file not found: $migrationName");
+                continue;
+            }
+            
             $migration = require $file;
             $migration->down();
-            $name = basename($file);
-            $this->driver->statement("DELETE FROM migrations WHERE migration = ?", [$name]);
-            $this->log("Rolled back: $name");
-            if (--$steps <= 0) {
-                break;
-            }
+            $this->driver->statement("DELETE FROM migrations WHERE migration = ?", [$migrationName]);
+            $this->log("Rolled back: $migrationName");
         }
     }
 }
