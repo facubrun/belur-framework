@@ -46,7 +46,8 @@ class App {
 
         return $app
             ->loadConfig()
-            ->runServiceProviders('boot')
+            ->runServicesProviders('boot')
+            ->setHttpHandlers()
             ->setUpDatabaseConnection()
             ->runServicesProviders('runtime');
     }
@@ -59,7 +60,7 @@ class App {
     }
 
     protected function runServicesProviders(string $type): self {
-        foreach (config('providers.$type', []) as $provider) {
+        foreach (config("providers.{$type}", []) as $provider) {
             $provider = new $provider();
             $provider->registerServices();
         }
@@ -81,7 +82,7 @@ class App {
         return $this;
     }
 
-    protected function setHtppHandlers(): self {
+    protected function setHttpHandlers(): self {
         $this->router = new Router();
         $this->server = new PhpNativeServer();
         $this->request = $this->server->getRequest();
