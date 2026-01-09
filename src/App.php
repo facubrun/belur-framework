@@ -77,6 +77,8 @@ class App {
             config("database.password"),
         );
         Model::setDatabaseDriver($this->database);
+
+        return $this;
     }
 
     protected function setHtppHandlers(): self {
