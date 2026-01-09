@@ -2,6 +2,8 @@
 
 namespace Belur\Http;
 
+use Belur\View\View;
+
 use function Belur\Helpers\app;
 
 /**
@@ -142,7 +144,7 @@ class Response {
     }
 
     public static function view(string $viewName, array $params = [], ?string $layout = null): Response {
-        $content = app()->view->render($viewName, $params, $layout);
+        $content = app(View::class)->render($viewName, $params, $layout);
 
         return (new self())
          ->setContentType('text/html')

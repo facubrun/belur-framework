@@ -9,7 +9,9 @@ use Belur\Http\Request;
 use Belur\Http\Response;
 use Belur\Routing\Route;
 
-$app = App::bootstrap();
+use function Belur\Helpers\config;
+
+$app = App::bootstrap(__DIR__ . '/..');
 
 $app->router->get('/test/{param}', function(Request $request) {
     return json($request->routeParams('param'));
@@ -134,5 +136,8 @@ Route::delete('/users/{id}/delete', function(Request $request) {
 
     return json($user->delete()->toArray());
 });
+
+Route::get('/dbhost', fn (Request $request) => Response::text(config('database.host')));
+
 
 $app->run();
