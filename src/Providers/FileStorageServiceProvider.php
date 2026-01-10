@@ -10,16 +10,16 @@ use function Belur\Helpers\config;
 use function Belur\Helpers\singleton;
 
 class FileStorageServiceProvider implements ServiceProvider {
-    public function registerServices(): void
-    {
+    public function registerServices(): void {
         match(config('storage.driver', 'disk')) {
             'disk' => singleton(
                 FileStorageDriver::class,
-                fn() => new DiskFileStorage(
+                fn () => new DiskFileStorage(
                     App::$root . '/storage',
                     'storage',
                     config('app.url')
-            ))
+                )
+            )
         };
     }
 }

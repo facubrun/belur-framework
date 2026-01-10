@@ -52,8 +52,8 @@ class PhpNativeServer implements Server {
                     $file['name'],
                 );
             }
-    }
+        }
 
-    return $files;
+        return $files;
     }
 }

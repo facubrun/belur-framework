@@ -15,5 +15,8 @@ return [
     'runtime' => [
         \App\Providers\RuleServiceProvider::class,
         \App\Providers\RouteServiceProvider::class,
+    ],
+    'cli' => [
+        \Belur\Providers\DatabaseDriverServiceProvider::class,
     ]
 ];

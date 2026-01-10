@@ -3,10 +3,12 @@
 namespace Belur\Database\Migrations;
 
 use Belur\Database\Drivers\DatabaseDriver;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 use function Belur\Helpers\snake_case;
 
 class Migrator {
+    private ConsoleOutput $output;
 
     public function __construct(
         private string $migrationsPath,
@@ -17,10 +19,13 @@ class Migrator {
         $this->migrationsPath = $migrationsPath;
         $this->templatesPath = $templatesPath;
         $this->driver = $driver;
+        $this->output = new ConsoleOutput();
     }
 
     private function log(string $message) {
-        echo $message . "\n";
+        if ($this->logProgress) {
+            $this->output->writeln("<info>$message</info>");
+        }
     }
 
     private function createMigrationTableIfNotExists() {
@@ -38,7 +43,7 @@ class Migrator {
         $migrations = glob("$this->migrationsPath/*.php");
 
         if (count($migrated) >= count($migrations)) {
-            $this->log("Nothing to migrate"); // No new migrations
+            $this->log("<comment>Nothing to migrate</comment>"); // No new migrations
             return;
         }
 
@@ -47,7 +52,7 @@ class Migrator {
             $migration->up();
             $name = basename($file);
             $this->driver->statement("INSERT INTO migrations (migration) VALUES (?)", [$name]);
-            $this->log("Migrated: $name");
+            $this->log("<info>Migrated: $name</info>");
         }
     }
 
@@ -104,7 +109,7 @@ class Migrator {
         $pending = count($migrated);
 
         if ($pending == 0) {
-            $this->log("Nothing to rollback");
+            $this->log("<comment>Nothing to rollback</comment>");
             return;
         }
 
@@ -120,14 +125,14 @@ class Migrator {
             $file = "$this->migrationsPath/$migrationName";
             
             if (!file_exists($file)) {
-                $this->log("Migration file not found: $migrationName");
+                $this->log("<comment>Migration file not found: $migrationName</comment>");
                 continue;
             }
             
             $migration = require $file;
             $migration->down();
             $this->driver->statement("DELETE FROM migrations WHERE migration = ?", [$migrationName]);
-            $this->log("Rolled back: $migrationName");
+            $this->log("<info>Rolled back: $migrationName</info>");
         }
     }
 }
