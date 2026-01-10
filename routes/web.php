@@ -1,7 +1,9 @@
 <?php
 
+use App\Controllers\Auth\LoginController;
 use App\Controllers\Auth\RegisterController;
 use App\Models\User;
+use Belur\Auth\Auth;
 use Belur\Crypto\Hasher;
 use Belur\Http\Response;
 use Belur\Routing\Route;
@@ -22,29 +24,4 @@ Route::get('/user/{user}', function (User $user) {
     return Response::json($user->toArray());
 });
 
-Route::get('/register', [RegisterController::class, 'create']);
-
-Route::post('/register', [RegisterController::class, 'store']);
-
-Route::get('/login', fn () => view('auth/login', []));
-
-Route::post('/login', function () {
-    $data = request()->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
-    ]);
-
-    $user = User::firstWhere('email', $data['email']);
-
-    if (is_null($user) || !app(Hasher::class)->verify($data['password'], $user->password)) {
-        return back()->withErrors(['email' => ['email' => 'Email not found']]);
-    }
-
-    $user->login();
-    return redirect('/');
-});
-
-Route::get('/logout', function () {
-    auth()->logout();
-    return redirect('/');
-});
+Auth::routes();

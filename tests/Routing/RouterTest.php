@@ -98,7 +98,7 @@ class RouterTest extends TestCase {
         $uri = '/test';
         $expectedResponse = Response::text('Final Response');
 
-        $router->get($uri, fn ($request) => $expectedResponse)
+        $router->get($uri, fn () => $expectedResponse)
             ->setMiddlewares([$middleware1, $middleware2]);
 
         $response = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
@@ -131,7 +131,7 @@ class RouterTest extends TestCase {
         $expectedResponse = Response::json(['message' => 'Stopped by middleware1']);
 
 
-        $router->get($uri, fn ($request) => $expectedResponse)
+        $router->get($uri, fn () => $expectedResponse)
             ->setMiddlewares([$middleware1, $middleware2]);
 
         $response = $router->resolve($this->createMockRequest($uri, HttpMethod::GET));
