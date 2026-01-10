@@ -14,7 +14,7 @@ class RegisterController extends Controller {
         return view('auth/register', []);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request, Hasher $hasher) {
         $data = $request->validate([
         'email' => ['required', 'email'],
         'password' => ['required'],
@@ -26,12 +26,12 @@ class RegisterController extends Controller {
         return back()->withErrors(
             ['confirm_password' => ['confirm_password' => 'Passwords do not match']]);
     }
-    $data['password'] = app(Hasher::class)->hash($data['password']);
+    $data['password'] = $hasher->hash($data['password']);
 
     $user = User::create($data);
     
     $user->login();
-    
+
     return redirect('/');
     }
 }

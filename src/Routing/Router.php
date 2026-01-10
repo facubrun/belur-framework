@@ -2,6 +2,7 @@
 
 namespace Belur\Routing;
 
+use Belur\Container\DependencyInjection;
 use Belur\Http\HttpMethod;
 use Belur\Http\HttpNotFoundException;
 use Belur\Http\Request;
@@ -55,10 +56,12 @@ class Router {
             $action[0] = $controller;
         }
 
+        $params = DependencyInjection::resolveParameters($action, $request->routeParams());
+
         return $this->runMiddlewares(
             $request,
             $route->middlewares(),
-            fn () => call_user_func($action, $request)
+            fn () => call_user_func($action, ...$params)
         );
     }
 

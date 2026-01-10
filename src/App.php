@@ -85,7 +85,7 @@ class App {
     protected function setHttpHandlers(): self {
         $this->router = new Router();
         $this->server = new PhpNativeServer();
-        $this->request = $this->server->getRequest();
+        $this->request = singleton(Request::class, fn () => $this->server->getRequest());
         $this->session = singleton(Session::class, fn () => new Session(app(SessionStorage::class)));
 
         return $this;
