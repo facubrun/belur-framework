@@ -3,6 +3,7 @@
 namespace Belur\Http;
 
 use Belur\Routing\Route;
+use Belur\Storage\File;
 use Belur\Validation\Validator;
 
 /**
@@ -36,6 +37,11 @@ class Request {
      * @var array
      */
     protected array $data = [];
+
+    /**
+     * Upload files.
+     */
+    protected array $files = [];
 
     /**
      * Query parameters.
@@ -207,5 +213,14 @@ class Request {
         $validator = new Validator($this->data(), $rules, $messages);
 
         return $validator->validate($rules, $messages);
+    }
+
+    public function files(string $name): ?File {
+        return $this->files[$name] ?? null;
+    }
+
+    public function setFiles(array $files): self {
+        $this->files = $files;
+        return $this;
     }
 }

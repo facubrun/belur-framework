@@ -5,6 +5,7 @@ namespace Belur\Server;
 use Belur\Http\HttpMethod;
 use Belur\Http\Request;
 use Belur\Http\Response;
+use Belur\Storage\File;
 
 /**
  * PHP Native Server implementation.
@@ -19,7 +20,8 @@ class PhpNativeServer implements Server {
         ->setMethod(HttpMethod::from($_SERVER['REQUEST_METHOD']))
         ->setHeaders(getallheaders())
         ->setData($_POST)
-        ->setQueryParams($_GET);
+        ->setQueryParams($_GET)
+        ->setFiles($this->uploadedFiles());
 
     }
 
@@ -38,5 +40,20 @@ class PhpNativeServer implements Server {
             header("$header: $value");
         }
         print($response->body());
+    }
+
+    public function uploadedFiles(): array {
+        $files = [];
+        foreach ($_FILES as $key => $file) {
+            if (!empty($file['tmp_name'])) {
+                $files[$key] = new File(
+                    file_get_contents($file['tmp_name']),
+                    $file['type'],
+                    $file['name'],
+                );
+            }
+    }
+
+    return $files;
     }
 }

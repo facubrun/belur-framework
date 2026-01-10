@@ -10,6 +10,7 @@ return [
         \Belur\Providers\ViewServiceProvider::class,
         \Belur\Providers\AuthenticatorServiceProvider::class,
         \Belur\Providers\HasherServiceProvider::class,
+        \Belur\Providers\FileStorageServiceProvider::class,
     ],
     'runtime' => [
         \App\Providers\RuleServiceProvider::class,
