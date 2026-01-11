@@ -1,23 +1,19 @@
 <?php
 
+use App\Controllers\ContactController;
+use App\Controllers\HomeController;
 use App\Models\User;
 use Belur\Auth\Auth;
 use Belur\Http\Response;
 use Belur\Routing\Route;
 
 
-Route::get('/', function () {
-    if (isGuest()) {
-        return Response::text('Guest');
-    }
+Route::get('/', fn () => redirect('/home'));
 
-    return Response::text(auth()->name);
-});
+Route::get('/home', [HomeController::class, 'show']);
 
-Route::get('/form', fn () => view('form', []));
-
-Route::get('/user/{user}', function (User $user) {
-    return Response::json($user->toArray());
-});
+Route::get('/contacts', [ContactController::class, 'index']);
+Route::get('/contacts/create', [ContactController::class, 'create']);
+Route::post('/contacts', [ContactController::class, 'store']);
 
 Auth::routes();

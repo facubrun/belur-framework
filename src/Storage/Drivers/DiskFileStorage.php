@@ -2,8 +2,6 @@
 
 namespace Belur\Storage\Drivers;
 
-use Belur\Storage\Drivers\FileStorageDriver;
-
 /**
  * Server disk storage.
  */

@@ -28,7 +28,7 @@ class Auth {
     public static function routes() {
         Route::get('/register', [RegisterController::class, 'create']);
         Route::post('/register', [RegisterController::class, 'store']);
-        Route::get('/login', fn () => [LoginController::class, 'create']);
+        Route::get('/login', [LoginController::class, 'create']);
         Route::post('/login', [LoginController::class, 'store']);
         Route::get('/logout', [LoginController::class, 'destroy']);
     }
