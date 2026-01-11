@@ -1,7 +1,0 @@
-<html>
-    <body>
-        <h1>
-            @content
-        </h1>
-    </body>
-</html>

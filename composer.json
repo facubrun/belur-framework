@@ -5,8 +5,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Belur\\": "src/",
-            "App\\": "app/"
+            "Belur\\": "src/"
         },
         "files": [
             "src/Helpers/app.php",
