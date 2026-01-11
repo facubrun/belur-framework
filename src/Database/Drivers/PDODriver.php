@@ -15,7 +15,11 @@ class PDODriver implements DatabaseDriver {
         string $username,
         string $password
     ) {
-        $dsn = "$protocol:host=$host;port=$port;dbname=$database";
+        $dsn = "$protocol:host=$host;port=$port";
+        if ($database !== '') {
+            $dsn .= ";dbname=$database";
+        }
+
         $this->connection = new PDO($dsn, $username, $password);
         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
@@ -29,9 +33,16 @@ class PDODriver implements DatabaseDriver {
     }
 
     public function statement(string $query, array $params = []): mixed {
+        if (!$this->isConnected()) {
+            throw new \RuntimeException('Database connection is not established');
+        }
         $stmt = $this->connection->prepare($query);
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function isConnected(): bool {
+        return $this->connection !== null;
     }
 
 }

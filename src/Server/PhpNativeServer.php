@@ -11,6 +11,36 @@ use Belur\Storage\File;
  * PHP Native Server implementation.
  */
 class PhpNativeServer implements Server {
+    protected function requestData(): array {
+        $headers = array_change_key_case(getallheaders(), CASE_LOWER);
+        $contentType = $headers['content-type'] ?? '';
+        $isJson = str_starts_with($contentType, 'application/json');
+
+        $data = [];
+
+        // Standard form POST
+        if ($_SERVER['REQUEST_METHOD'] === HttpMethod::POST->value && !$isJson) {
+            return $_POST ?? [];
+        }
+
+        $raw = file_get_contents('php://input');
+
+        if ($isJson) {
+            $data = json_decode($raw, associative: true);
+            if (!is_array($data) || $data === null) {
+                parse_str($raw, $data);
+            }
+        } else {
+            parse_str($raw, $data);
+        }
+
+        if (!is_array($data)) {
+            $data = [];
+        }
+
+        return $data;
+    }
+
     /**
      * @inheritDoc
      */
@@ -19,7 +49,7 @@ class PhpNativeServer implements Server {
         ->setUri(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))
         ->setMethod(HttpMethod::from($_SERVER['REQUEST_METHOD']))
         ->setHeaders(getallheaders())
-        ->setData($_POST)
+        ->setData($this->requestData())
         ->setQueryParams($_GET)
         ->setFiles($this->uploadedFiles());
 

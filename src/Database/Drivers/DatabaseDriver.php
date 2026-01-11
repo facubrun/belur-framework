@@ -14,4 +14,5 @@ interface DatabaseDriver {
     public function lastInsertId();
     public function close();
     public function statement(string $query, array $params = []): mixed;
+    public function isConnected(): bool;
 }

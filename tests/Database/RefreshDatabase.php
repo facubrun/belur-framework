@@ -21,10 +21,12 @@ trait RefreshDatabase {
                     'mysql',
                     'localhost',
                     3306,
-                    'belur_tests',
+                    '',
                     'root',
                     ''
                 );
+                $this->driver->statement("CREATE DATABASE IF NOT EXISTS belur_tests");
+                $this->driver->statement("USE belur_tests");
             } catch (PDOException $e) {
                 $this->markTestSkipped('Database connection could not be established: ' . $e->getMessage());
             }
@@ -32,7 +34,14 @@ trait RefreshDatabase {
     }
 
     protected function tearDown(): void {
-        $this->driver->statement("DROP DATABASE IF EXISTS belur_tests");
-        $this->driver->statement("CREATE DATABASE belur_tests");
+        if (!$this->driver || !$this->driver->isConnected()) {
+            return;
+        }
+
+        try {
+            $this->driver->statement("DROP DATABASE IF EXISTS belur_tests");
+        } catch (PDOException $e) {
+            // ignore cleanup failures in tests
+        }
     }
 }

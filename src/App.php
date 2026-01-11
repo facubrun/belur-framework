@@ -91,7 +91,7 @@ class App {
         return $this;
     }
 
-    public function prepareNextRequest(): void {
+    protected function prepareNextRequest(): void {
         if ($this->request->method() == HttpMethod::GET) {
             $this->session->set('_previous', $this->request->uri());
         }
