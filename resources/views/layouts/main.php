@@ -65,7 +65,12 @@
     </nav>
 
     <main class="container">
-      @content
+    <?php if (session()->has('alert')): ?>
+      <div class="alert alert-primary" role="alert">
+        <?= session()->get('alert') ?>
+      </div>
+    <?php endif; ?>
+    @content
     </main>
   </body>
 </html>
