@@ -4,8 +4,11 @@ namespace Belur\Cli;
 
 use Belur\App;
 use Belur\Cli\Commands\MakeMigration;
+use Belur\Cli\Commands\MakeModel;
 use Belur\Cli\Commands\Migrate;
 use Belur\Cli\Commands\MigrateRollback;
+use Belur\Cli\Commands\Serve;
+use Belur\Cli\Commands\MakeController;
 use Dotenv\Dotenv;
 use Belur\Config\Config;
 use Belur\Database\Drivers\DatabaseDriver;
@@ -55,6 +58,9 @@ class Cli {
             new MakeMigration(),
             new Migrate(),
             new MigrateRollback(),
+            new MakeModel(),
+            new Serve(),
+            new MakeController()
         ]);
 
         $cli->run();
