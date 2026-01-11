@@ -22,7 +22,7 @@ class Serve extends Command {
         $dir = App::$root . '/public';
 
         $output->writeln("<info>Starting development server at http://$host:$port</info>");
-        shell_exec("php -S $host:$port -t $dir/index.php");
+        shell_exec("php -S $host:$port -t $dir");
 
         return Command::SUCCESS;
     }

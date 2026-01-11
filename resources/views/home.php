@@ -5,7 +5,5 @@
         Please <a href="/login">log in</a> or register <a href="/register">here</a> to access your dashboard.
     </div>
 <?php } else {  ?>
-    <div>
-        <a href='/contacts'>Contact List</a>
-    </div>
+    You are logged in!
 <?php } ?>
